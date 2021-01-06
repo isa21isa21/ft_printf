@@ -6,7 +6,7 @@
 /*   By: cquickbe <cquickbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 13:39:46 by cquickbe          #+#    #+#             */
-/*   Updated: 2020/12/29 10:15:22 by cquickbe         ###   ########.fr       */
+/*   Updated: 2021/01/06 14:31:20 by cquickbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,16 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-void	ft_puthex(unsigned long long int nb)
+int	ft_puthex_num(unsigned long long int nb)
 {
 	char	hex[16];
 	int		tmp;
 	int		i;
+	int		b;
 
 	ft_bzero(hex, 16);
 	i = 0;
+	b = 0;
 	while (nb)
 	{
 		tmp = nb % 16;
@@ -46,7 +48,87 @@ void	ft_puthex(unsigned long long int nb)
 	}
 	while (i >= 0)
 	{
+		b++;
+		i--;
+	}
+	return (b - 1);
+}
+
+// void ft_putheX(unsigned int x)
+// {
+// 	char	hex[16];
+// 	int		tmp;
+// 	int		i;
+
+// 	ft_bzero(hex, 16);
+// 	i = 0;
+// 	while (x)
+// 	{
+// 		tmp = x % 16;
+// 		hex[i] = (tmp + (tmp >= 10 ? ('A' - 10) : '0'));
+// 		x /= 16;
+// 		i++;
+// 	}
+// 	while (i >= 0)
+// 	{
+// 		ft_putchar(hex[i]);
+// 		i--;
+// 	}
+// }
+
+void ft_putheX(unsigned int x)
+{
+	char	hex[16];
+	int		tmp;
+	int		i;
+
+	ft_bzero(hex, 16);
+	i = 0;
+	while (x)
+	{
+		tmp = x % 16;
+		hex[i] = (tmp + (tmp >= 10 ? ('A' - 10) : '0'));
+		x /= 16;
+		i++;
+	}
+	while (i >= 0)
+	{
 		ft_putchar(hex[i]);
+		i--;
+	}
+}
+
+void	ft_puthex(unsigned int x)
+{
+	char	hex[16];
+	int		tmp;
+	int		i;
+
+	ft_bzero(hex, 16);
+	i = 0;
+	while (x)
+	{
+		tmp = x % 16;
+		hex[i] = (tmp + (tmp >= 10 ? ('A' - 10) : '0'));
+		x /= 16;
+		i++;
+	}
+	while (i >= 0)
+	{
+		if (hex[i] == 'A')
+			ft_putchar(hex[i] + 32);
+		else if (hex[i] == 'B')
+			ft_putchar(hex[i] + 32);
+		else if (hex[i] == 'C')
+			ft_putchar(hex[i] + 32);
+		else if (hex[i] == 'D')
+			ft_putchar(hex[i] + 32);
+		else if (hex[i] == 'E')
+			ft_putchar(hex[i] + 32);
+		else if (hex[i] == 'F')
+			ft_putchar(hex[i] + 32);
+		else
+			ft_putchar(hex[i]);
 		i--;
 	}
 }
@@ -137,7 +219,7 @@ void	ft_putstr(char *s)
 	}
 }
 
-int	how_nums_in_num(int d)
+int	how_nums_in_d(int d)
 {
 	int i;
 
@@ -150,71 +232,41 @@ int	how_nums_in_num(int d)
 	return (i);
 }
 
-void	ft_wid_for_d(int d, int how_numb, int dash_or_zero, int *wid_or_accur)
+void	ft_spec_c_one(char c, int *wid_acc)
 {
-	if (dash_or_zero < 0)
+	if (wid_acc[0] > 0)
 	{
-		ft_putnbr(d);
-		while (wid_or_accur[0]-- > how_numb && write(1, " ", 1))
-			wid_or_accur[3]++;
-		wid_or_accur[3] += how_numb;
-	}
-	else if (dash_or_zero > 0)
-	{
-		if (wid_or_accur[2] > 0)
-			while (wid_or_accur[0]-- != how_numb && write(1, " ", 1))
-				wid_or_accur[3]++;
-		else if (wid_or_accur[2] == 0)
-			while (wid_or_accur[0]-- != how_numb && write(1, "0", 1))
-				wid_or_accur[3]++;
-		ft_putnbr(d);
-		wid_or_accur[3] += how_numb;
+		ft_putchar(c);
+		while (wid_acc[0]-- > 1 && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += 1;
 	}
 	else
 	{
-		while (wid_or_accur[0]-- != how_numb && write(1, " ", 1))
-			wid_or_accur[3]++;
-		ft_putnbr(d);
-		wid_or_accur[3] += how_numb;
+		ft_putchar(c);
+		wid_acc[3] += 1;
 	}
 }
 
-void	ft_make_accuracy_for_d(int d, int how_numb, int *wid_or_accur)
+void	ft_spec_c(const char *str, va_list ap, int dash_zero, int *wid_acc)
 {
-	if (wid_or_accur[1] <= how_numb)
-		ft_putnbr(d);
-	else if (wid_or_accur[1] > how_numb)
-	{
-		while (wid_or_accur[1]-- > how_numb && write(1, "0", 1))
-			wid_or_accur[3]++;
-		ft_putnbr(d);
-	}
-}
+	char c;
 
-void	ft_wid_acc_for_d(int d, int how_numb, int dash_or_zero, int *wid_or_acc)
-{
-	int tmp;
-
-	if (dash_or_zero < 0)
+	if (*str == 'c' && (c = va_arg(ap, int)))
 	{
-		tmp = wid_or_acc[1];
-		while (wid_or_acc[1]-- > how_numb && write(1, "0", 1))
-			wid_or_acc[3]++;
-		ft_putnbr(d);
-		while (tmp++ < wid_or_acc[0] && write(1, " ", 1))
-			wid_or_acc[3]++;
-		wid_or_acc[3] += how_numb;
-	}
-	else if (dash_or_zero >= 0)
-	{
-		if (wid_or_acc[1] <= how_numb)
-			ft_wid_for_d(d, how_numb, dash_or_zero, wid_or_acc);
-		else if (wid_or_acc[1] > how_numb)
+		if (dash_zero < 0)
+			ft_spec_c_one(c, wid_acc);
+		else if (wid_acc[0] > 0)
 		{
-			while (wid_or_acc[0]-- > wid_or_acc[1] && write(1, " ", 1))
-				wid_or_acc[3]++;
-			ft_make_accuracy_for_d(d, how_numb, wid_or_acc);
-			wid_or_acc[3] += how_numb;
+			while (wid_acc[0]-- > 1 && write(1, " ", 1))
+				wid_acc[3]++;
+			ft_putchar(c);
+			wid_acc[3] += 1;
+		}
+		else
+		{
+			ft_putchar(c);
+			wid_acc[3] += 1;
 		}
 	}
 }
@@ -236,10 +288,13 @@ void	ft_make_dash_for_s_one(char *s, int len, int *wid_or_accur)
 void	ft_make_dash_for_s_two(char *s, int len, int *wid_or_accur)
 {
 	if (wid_or_accur[1] < len)
-		while (wid_or_accur[1]-- != 0)
+		while (wid_or_accur[1]-- != 0 && wid_or_accur[3]++)
 			ft_putchar(*s++);
 	else
+	{
+		wid_or_accur[3] += len;
 		ft_putstr(s);
+	}
 }
 
 void	ft_make_dash_for_s_three(char *s, int len, int *wid_or_accur, int tmp)
@@ -273,7 +328,15 @@ void	ft_make_dash_for_s(char *s, int len, int *wid_or_accur)
 	else if (wid_or_accur[0] > 0 && wid_or_accur[1] > 0)
 		ft_make_dash_for_s_three(s, len, wid_or_accur, tmp);
 	else
-		ft_putstr(s);
+	{
+		if (wid_or_accur[2] == 1)
+			return ;
+		else
+		{
+			wid_or_accur[3] += len;
+			ft_putstr(s);
+		}
+	}
 }
 
 void	ft_make_non_dash_for_s_one(char *s, int len, int *wid_or_accur)
@@ -330,45 +393,6 @@ void	ft_make_non_dash_for_s(char *s, int len, int *wid_or_accur)
 	}
 }
 
-void	ft_spec_c_one(char c, va_list ap, int dash_zero, int *wid_acc)
-{
-	if (wid_acc[0] > 0)
-	{
-		ft_putchar(c);
-		while (wid_acc[0]-- > 1 && write(1, " ", 1))
-			wid_acc[3]++;
-		wid_acc[3] += 1;
-	}
-	else
-	{
-		ft_putchar(c);
-		wid_acc[3] += 1;
-	}
-}
-
-void	ft_spec_c(const char *str, va_list ap, int dash_zero, int *wid_acc)
-{
-	char c;
-
-	if (*str == 'c' && (c = va_arg(ap, int)))
-	{
-		if (dash_zero < 0)
-			ft_spec_c_one(c, ap, dash_zero, wid_acc);
-		else if (wid_acc[0] > 0)
-		{
-			while (wid_acc[0]-- > 1 && write(1, " ", 1))
-				wid_acc[3]++;
-			ft_putchar(c);
-			wid_acc[3] += 1;
-		}
-		else
-		{
-			ft_putchar(c);
-			wid_acc[3] += 1;
-		}
-	}
-}
-
 void	ft_spec_s(const char *format, va_list ap, int dash_zero, int *wid_acc)
 {
 	char	*s;
@@ -384,6 +408,211 @@ void	ft_spec_s(const char *format, va_list ap, int dash_zero, int *wid_acc)
 	}
 }
 
+void ft_spec_p_one(unsigned long long x, int how_numb, int dash_zero, int *wid_acc)
+{
+	if (dash_zero < 0)
+	{
+		ft_putheX(x);
+		while (wid_acc[0]-- > how_numb && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+	}
+	else if (dash_zero > 0)
+	{
+		while(wid_acc[0]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+		ft_putheX(x);
+	}
+	else if (dash_zero == 0)
+	{
+		while(wid_acc[0]-- > how_numb && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+		ft_putheX(x);
+	}
+}
+
+void ft_spec_p_two(unsigned long long x, int how_numb, int dash_zero, int *wid_acc)
+{
+	if (wid_acc[1] == 0)
+	{
+		ft_putheX(x);
+		wid_acc[3] += how_numb;
+	}
+	else if (wid_acc[1] <= how_numb)
+	{
+		ft_putheX(x);
+		wid_acc[3] += how_numb;
+	}
+	else if (wid_acc[1] > how_numb)
+	{
+		while (wid_acc[1]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		ft_putheX(x); 
+		wid_acc[3] += how_numb;
+	}
+}
+
+void ft_spec_p_three(unsigned long long x, int how_numb, int dash_zero, int *wid_acc)
+{
+	int tmp;
+
+	if (dash_zero < 0)
+	{
+		tmp = wid_acc[1];
+		while (wid_acc[1]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		ft_putheX(x);
+		while (wid_acc[0]-- > tmp && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+	}
+	else if (dash_zero >= 0)
+	{
+		while (wid_acc[0]-- > wid_acc[1] && write(1, " ", 1))
+			wid_acc[3]++;
+		while (wid_acc[1]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		ft_putheX(x);
+		wid_acc[3] += how_numb;
+	}
+}
+
+void	ft_spec_p(const char *format, va_list ap, int dash_zero, int *wid_acc)
+{
+	unsigned long int p;
+	int how_numb;
+
+	if ((*format == 'p' || *format == 'i') && (p = va_arg(ap, unsigned long int)))
+	{
+		how_numb = ft_puthex_num(p);
+		if (wid_acc[0] > 0 && wid_acc[1] < 1)
+			ft_spec_p_one(p, how_numb, dash_zero, wid_acc);
+		else if (wid_acc[0] < 1 && wid_acc[1] > 0)
+			ft_spec_p_two(p, how_numb, dash_zero, wid_acc);
+		else if (wid_acc[0] > 0 && wid_acc[1] > 0)
+			ft_spec_p_three(p, how_numb, dash_zero, wid_acc);
+		else
+		{
+			ft_putheX(p);
+			wid_acc[3] += how_numb;
+		}
+	}
+}
+
+void	ft_wid_for_d(int d, int how_numb, int dash_or_zero, int *wid_or_accur)
+{
+	if (dash_or_zero < 0)
+	{
+		ft_putnbr(d);
+		if (d < 0)
+			how_numb++;
+		while (wid_or_accur[0]-- > how_numb && write(1, " ", 1))
+			wid_or_accur[3]++;
+		wid_or_accur[3] += how_numb;
+	}
+	else if (dash_or_zero > 0)
+	{
+		if (wid_or_accur[2] > 0)
+			while (wid_or_accur[0]-- != how_numb && write(1, " ", 1))
+				wid_or_accur[3]++;
+		else if (wid_or_accur[2] == 0)
+			while (wid_or_accur[0]-- != how_numb && write(1, "0", 1))
+				wid_or_accur[3]++;
+		ft_putnbr(d);
+		wid_or_accur[3] += how_numb;
+	}
+	else
+	{
+		how_numb++;
+		while (wid_or_accur[0]-- != how_numb && write(1, " ", 1))
+			wid_or_accur[3]++;
+		ft_putnbr(d);
+		wid_or_accur[3] += how_numb;
+	}
+}
+
+void	ft_make_accuracy_for_d(int d, int how_numb, int *wid_or_accur)
+{
+	if (wid_or_accur[1] <= how_numb)
+	{
+		wid_or_accur[3] += how_numb;
+		ft_putnbr(d);
+	}
+	else if (wid_or_accur[1] > how_numb)
+	{
+		if (d <= 0)
+		{
+			write(1, "-", 1);
+			while (wid_or_accur[1]-- > how_numb && write(1, "0", 1))
+				wid_or_accur[3]++;
+			ft_putnbr(d * (-1));
+			wid_or_accur[3]++;
+			wid_or_accur[3] += how_numb;
+		}
+		else if (d > 0)
+		{
+			while (wid_or_accur[1]-- > how_numb && write(1, "0", 1))
+				wid_or_accur[3]++;
+			ft_putnbr(d);
+			wid_or_accur[3] += how_numb;
+		}
+	}
+}
+
+void	ft_wid_acc_for_d(int d, int how_numb, int dash_or_zero, int *wid_or_acc)
+{
+	int tmp;
+
+	if (dash_or_zero < 0)
+	{
+		tmp = wid_or_acc[1];
+		if (d < 0)
+		{
+			write(1, "-", 1);
+			while (wid_or_acc[1]-- > how_numb && write(1, "0", 1))
+				wid_or_acc[3]++;
+			ft_putnbr(d * -1);
+			wid_or_acc[0]--;
+			wid_or_acc[3]++;
+		}
+		else if (d > 0)
+		{
+			while (wid_or_acc[1]-- > how_numb && write(1, "0", 1))
+				wid_or_acc[3]++;
+			ft_putnbr(d);
+		}
+		while (how_numb < wid_or_acc[0]-- && write(1, " ", 1))
+			wid_or_acc[3]++;
+		wid_or_acc[3] += how_numb;
+	}
+	else if (dash_or_zero >= 0)//ft_printf("<%d>\n", ft_printf("hello world |%-10.7d|", -123123));
+	{
+		if (wid_or_acc[1] <= how_numb)
+			ft_wid_for_d(d, how_numb, dash_or_zero, wid_or_acc);
+		else if (d < 0)
+		{
+			wid_or_acc[0]--;
+			while (wid_or_acc[0]-- > wid_or_acc[1] && write(1, " ", 1))
+				wid_or_acc[3]++;
+			write(1, "-", 1);
+			while (wid_or_acc[1]-- > how_numb && write(1, "0", 1))
+				wid_or_acc[3]++;
+			ft_putnbr(d * (-1));
+			wid_or_acc[3]++;
+			wid_or_acc[3] += how_numb;
+		}
+		else if (wid_or_acc[1] > how_numb)
+		{
+			while (wid_or_acc[0]-- > wid_or_acc[1] && write(1, " ", 1))
+				wid_or_acc[3]++;
+			ft_make_accuracy_for_d(d, how_numb, wid_or_acc);
+			wid_or_acc[3] += how_numb;
+		}
+	}
+}
+
 void	ft_spec_d_i(const char *format, va_list ap, int dash_zero, int *wid_acc)
 {
 	int d;
@@ -391,7 +620,7 @@ void	ft_spec_d_i(const char *format, va_list ap, int dash_zero, int *wid_acc)
 
 	if ((*format == 'd' || *format == 'i') && (d = va_arg(ap, int)))
 	{
-		how_numb = how_nums_in_num(d);
+		how_numb = how_nums_in_d(d);
 		if (wid_acc[0] > 0 && wid_acc[1] < 1)
 			ft_wid_for_d(d, how_numb, dash_zero, wid_acc);
 		else if (wid_acc[0] < 1 && wid_acc[1] > 0)
@@ -401,35 +630,204 @@ void	ft_spec_d_i(const char *format, va_list ap, int dash_zero, int *wid_acc)
 		else
 		{
 			wid_acc[3] += how_numb;
+			if (d < 0)
+				wid_acc[3]++;
 			ft_putnbr(d);
 		}
 	}
 }
 
-void ft_spec_x_X(const char *format, va_list ap, int dash_zero, int *wid_acc)
+void	ft_spec_u(const char *format, va_list ap, int dash_zero, int *wid_acc)
 {
-	unsigned long long int x;
+	unsigned long int p;
+
+	if (*format == 'p' && (p = va_arg(ap, unsigned long int))
+	{
+		
+	}
+}
+
+void ft_spec_x_one(unsigned long long x, int how_numb, int dash_zero, int *wid_acc)
+{
+	if (dash_zero < 0)
+	{
+		ft_puthex(x);
+		while (wid_acc[0]-- > how_numb && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+	}
+	else if (dash_zero > 0)
+	{
+		while(wid_acc[0]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+		ft_puthex(x);
+	}
+	else if (dash_zero == 0)
+	{
+		while(wid_acc[0]-- > how_numb && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+		ft_puthex(x);
+	}
+}
+
+void ft_spec_x_two(unsigned long long x, int how_numb, int dash_zero, int *wid_acc)
+{
+	if (wid_acc[1] == 0)
+	{
+		ft_puthex(x);
+		wid_acc[3] += how_numb;
+	}
+	else if (wid_acc[1] <= how_numb)
+	{
+		ft_puthex(x);
+		wid_acc[3] += how_numb;
+	}
+	else if (wid_acc[1] > how_numb)
+	{
+		while (wid_acc[1]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		ft_puthex(x);
+		wid_acc[3] += how_numb;
+	}
+}
+
+void ft_spec_x_three(unsigned long long x, int how_numb, int dash_zero, int *wid_acc)
+{
+	int tmp;
+
+	if (dash_zero < 0)
+	{
+		tmp = wid_acc[1];
+		while (wid_acc[1]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		ft_puthex(x);
+		while (wid_acc[0]-- > tmp && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+	}
+	else if (dash_zero >= 0)
+	{
+		while (wid_acc[0]-- > wid_acc[1] && write(1, " ", 1))
+			wid_acc[3]++;
+		while (wid_acc[1]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		ft_puthex(x);
+		wid_acc[3] += how_numb;
+	}
+}
+
+void ft_spec_x(const char *format, va_list ap, int dash_zero, int *wid_acc)
+{
+	unsigned int x;
+	int how_numb;
+	if (*format == 'x' && (x = va_arg(ap, unsigned int)))
+	{
+		how_numb = ft_puthex_num(x);
+		if (wid_acc[0] > 0 && wid_acc[1] < 1)
+			ft_spec_x_one(x, how_numb, dash_zero, wid_acc);
+		else if (wid_acc[0] < 1 && wid_acc[1] > 0)
+			ft_spec_x_two(x, how_numb, dash_zero, wid_acc);
+		else if (wid_acc[0] > 0 && wid_acc[1] > 0)
+			ft_spec_x_three(x, how_numb, dash_zero, wid_acc);
+		else
+		{
+			ft_puthex(x);
+			wid_acc[3] += how_numb;
+		}
+	}
+}
+
+void ft_spec_X_one(unsigned long long x, int how_numb, int dash_zero, int *wid_acc)
+{
+	if (dash_zero < 0)
+	{
+		ft_putheX(x);
+		while (wid_acc[0]-- > how_numb && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+	}
+	else if (dash_zero > 0)
+	{
+		while(wid_acc[0]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+		ft_putheX(x);
+	}
+	else if (dash_zero == 0)
+	{
+		while(wid_acc[0]-- > how_numb && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+		ft_putheX(x);
+	}
+}
+
+void ft_spec_X_two(unsigned long long x, int how_numb, int dash_zero, int *wid_acc)
+{
+	if (wid_acc[1] == 0)
+	{
+		ft_putheX(x);
+		wid_acc[3] += how_numb;
+	}
+	else if (wid_acc[1] <= how_numb)
+	{
+		ft_putheX(x);
+		wid_acc[3] += how_numb;
+	}
+	else if (wid_acc[1] > how_numb)
+	{
+		while (wid_acc[1]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		ft_putheX(x);
+		wid_acc[3] += how_numb;
+	}
+}
+
+void ft_spec_X_three(unsigned long long x, int how_numb, int dash_zero, int *wid_acc)
+{
+	int tmp;
+
+	if (dash_zero < 0)
+	{
+		tmp = wid_acc[1];
+		while (wid_acc[1]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		ft_putheX(x);
+		while (wid_acc[0]-- > tmp && write(1, " ", 1))
+			wid_acc[3]++;
+		wid_acc[3] += how_numb;
+	}
+	else if (dash_zero >= 0)
+	{
+		while (wid_acc[0]-- > wid_acc[1] && write(1, " ", 1))
+			wid_acc[3]++;
+		while (wid_acc[1]-- > how_numb && write(1, "0", 1))
+			wid_acc[3]++;
+		ft_putheX(x);
+		wid_acc[3] += how_numb;
+	}
+}
+
+void ft_spec_X(const char *format, va_list ap, int dash_zero, int *wid_acc)
+{
+	unsigned int x;
 	int how_numb;
 
-	if((*format == 'x' || *format == 'X') && (x = va_arg(ap, unsigned long long int)))
+	if (*format == 'X' && (x = va_arg(ap, unsigned int)))
 	{
-		how_numb = how_nums_in_num(x);
+		how_numb = ft_puthex_num(x);
 		if (wid_acc[0] > 0 && wid_acc[1] < 1)
+			ft_spec_X_one(x, how_numb, dash_zero, wid_acc);
+		else if (wid_acc[0] < 1 && wid_acc[1] > 0)
+			ft_spec_X_two(x, how_numb, dash_zero, wid_acc);
+		else if (wid_acc[0] > 0 && wid_acc[1] > 0)
+			ft_spec_X_three(x, how_numb, dash_zero, wid_acc);
+		else
 		{
-			if (dash_zero < 0)
-			{
-				ft_puthex(x);
-				while (wid_acc[0]-- > how_numb && write(1, " ", 1))
-					wid_acc[3]++;
-				wid_acc[3] += how_numb;
-			}
-			else if (dash_zero >= 0)
-			{
-				while(wid_acc[0]-- > how_numb && write(1, "0", 1))
-					wid_acc[3]++;
-				wid_acc[3] += how_numb;
-				ft_puthex(x);
-			}
+			ft_putheX(x);
+			wid_acc[3] += how_numb;
 		}
 	}
 }
@@ -464,7 +862,8 @@ char	*ft_wid_or_acc(char *format, va_list ap, int dash_zero, int *i)
 	ft_spec_c(format, ap, dash_zero, wid_or_accur);
 	ft_spec_s(format, ap, dash_zero, wid_or_accur);
 	ft_spec_d_i(format, ap, dash_zero, wid_or_accur);
-	ft_spec_x_X(format, ap, dash_zero, wid_or_accur);
+	ft_spec_x(format, ap, dash_zero, wid_or_accur);
+	ft_spec_X(format, ap, dash_zero, wid_or_accur);
 	*i = wid_or_accur[3];
 	return (format);
 }
@@ -521,9 +920,9 @@ int	ft_printf(const char *format, ...)
 
 int	main(void)
 {
-	printf("<%d>\n", printf("hello world |%05X|", 255));
+	printf("<%d>\n", printf("hello world |%|", 255));
 	printf("\n");
-	ft_printf("<%d>\n", ft_printf("hello world |%05x|", 255));
+	ft_printf("<%d>\n", ft_printf("hello world |%|", 255));
 	printf("\n");
 	return (0);
 }
