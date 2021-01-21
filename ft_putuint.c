@@ -6,13 +6,13 @@
 /*   By: cquickbe <cquickbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 11:27:29 by cquickbe          #+#    #+#             */
-/*   Updated: 2021/01/09 13:02:40 by cquickbe         ###   ########.fr       */
+/*   Updated: 2021/01/21 11:56:38 by cquickbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void		ft_putuint(unsigned long int n)
+void		ft_putuint(unsigned n)
 {
 	if (n < 0)
 	{

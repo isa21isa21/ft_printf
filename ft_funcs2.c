@@ -6,7 +6,7 @@
 /*   By: cquickbe <cquickbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 11:39:18 by cquickbe          #+#    #+#             */
-/*   Updated: 2021/01/16 13:18:21 by cquickbe         ###   ########.fr       */
+/*   Updated: 2021/01/17 16:56:52 by cquickbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int		ft_how_nums_in_u(unsigned int n)
 	return (how_nums_in_uint(n));
 }
 
-char	*ft_do_spec(char *format, va_list ap, int dash_zero, int *wid_accur)
+char	*ft_do_spec(char *format, va_list ap, int *dash_zero, int *wid_accur)
 {
 	if (*format == '%')
 		ft_spec_perc(format, dash_zero, wid_accur);

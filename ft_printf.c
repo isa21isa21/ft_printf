@@ -6,13 +6,10 @@
 /*   By: cquickbe <cquickbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/18 13:39:46 by cquickbe          #+#    #+#             */
-/*   Updated: 2021/01/16 13:18:19 by cquickbe         ###   ########.fr       */
+/*   Updated: 2021/01/21 12:26:55 by cquickbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdarg.h>
-#include <stdio.h>
 #include "ft_printf.h"
 
 char	*ft_wid_or_acc_2(char *format, va_list ap, int *wid_or_acc, char *tmp)
@@ -35,7 +32,7 @@ char	*ft_wid_or_acc_2(char *format, va_list ap, int *wid_or_acc, char *tmp)
 	return (format);
 }
 
-char	*ft_wid_or_acc(char *format, va_list ap, int dash_zero, int *i)
+char	*ft_wid_or_acc(char *format, va_list ap, int *dash_zero, int *i)
 {
 	char	*tmp;
 	int		wid_or_accur[4];
@@ -50,7 +47,7 @@ char	*ft_wid_or_acc(char *format, va_list ap, int dash_zero, int *i)
 	if (*format == '*' && (format++))
 	{
 		wid_or_accur[0] = va_arg(ap, int);
-		if (wid_or_accur[0] < 0 && --dash_zero)
+		if (wid_or_accur[0] < 0 && ++dash_zero[0])
 			wid_or_accur[0] *= -1;
 	}
 	format = ft_wid_or_acc_2(format, ap, wid_or_accur, tmp);
@@ -61,9 +58,10 @@ char	*ft_wid_or_acc(char *format, va_list ap, int dash_zero, int *i)
 
 char	*ft_flags(char *format, va_list ap, int *i)
 {
-	int dash_or_zero_flag;
+	int dash_or_zero_flag[2];
 
-	dash_or_zero_flag = 0;
+	dash_or_zero_flag[0] = 0;
+	dash_or_zero_flag[1] = 0;
 	format++;
 	if (*format == '%')
 	{
@@ -76,9 +74,9 @@ char	*ft_flags(char *format, va_list ap, int *i)
 	*format != 'x' && *format != 'X' && *format != '.' && *format != '*')
 	{
 		if (*format == '-' && (format++))
-			dash_or_zero_flag--;
+			dash_or_zero_flag[0]++;
 		else if (*format == '0' && (format++))
-			dash_or_zero_flag++;
+			dash_or_zero_flag[1]++;
 	}
 	format = ft_wid_or_acc(format, ap, dash_or_zero_flag, i);
 	return (format);

@@ -6,28 +6,28 @@
 /*   By: cquickbe <cquickbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 11:03:35 by cquickbe          #+#    #+#             */
-/*   Updated: 2021/01/15 16:50:17 by cquickbe         ###   ########.fr       */
+/*   Updated: 2021/01/17 18:13:23 by cquickbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void		ft_spec_p_1(unsigned long x, int how_numb, int dsh_zr, int *wid_acc)
+void		ft_spec_p_1(unsigned long x, int numb, int *dsh_zr, int *wid_acc)
 {
-	if (dsh_zr < 0)
+	if (dsh_zr[0] > dsh_zr[1])
 	{
 		ft_putptr(x);
-		while (wid_acc[0]-- > how_numb && write(1, " ", 1))
+		while (wid_acc[0]-- > numb && write(1, " ", 1))
 			wid_acc[3]++;
-		wid_acc[3] += how_numb;
+		wid_acc[3] += numb;
 	}
-	else if (dsh_zr == 0)
+	else if (dsh_zr[0] == 0 && dsh_zr[1] == 0)
 	{
 		if (x == 0 && wid_acc[2] > 0)
-			(x == 0) ? how_numb-- : 1;
-		while (wid_acc[0]-- > how_numb && write(1, " ", 1))
+			(x == 0) ? numb-- : 1;
+		while (wid_acc[0]-- > numb && write(1, " ", 1))
 			wid_acc[3]++;
-		wid_acc[3] += how_numb;
+		wid_acc[3] += numb;
 		if (x == 0 && wid_acc[2] > 0)
 			ft_putstr("0x");
 		else
@@ -35,7 +35,7 @@ void		ft_spec_p_1(unsigned long x, int how_numb, int dsh_zr, int *wid_acc)
 	}
 }
 
-void		ft_spec_p(char *format, va_list ap, int dsh_zer, int *wid_acc)
+void		ft_spec_p(char *format, va_list ap, int *dsh_zer, int *wid_acc)
 {
 	unsigned long	p;
 	int				how_numb;

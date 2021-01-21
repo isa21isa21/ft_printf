@@ -6,7 +6,7 @@
 /*   By: cquickbe <cquickbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 11:03:06 by cquickbe          #+#    #+#             */
-/*   Updated: 2021/01/17 11:55:47 by cquickbe         ###   ########.fr       */
+/*   Updated: 2021/01/17 17:35:19 by cquickbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char		*ft_make_non_dash_for_s(char *str, char *s, int len, int *wid_acc)
 	return (str);
 }
 
-char		*ft_spec_s(char *str, va_list ap, int dsh_zer, int *wid_acc)
+char		*ft_spec_s(char *str, va_list ap, int *dsh_zer, int *wid_acc)
 {
 	char	*s;
 	int		len;
@@ -66,9 +66,9 @@ char		*ft_spec_s(char *str, va_list ap, int dsh_zer, int *wid_acc)
 	if (s == NULL)
 		s = "(null)";
 	len = ft_strlen(s);
-	if (dsh_zer < 0)
+	if (dsh_zer[0] > dsh_zer[1])
 		ft_make_dash_for_s(s, len, wid_acc);
-	else if (dsh_zer >= 0)
+	else if (dsh_zer[1] > 0 || (dsh_zer[1] == 0 && dsh_zer[0] == 0))
 		ft_make_non_dash_for_s(str, s, len, wid_acc);
 	return (str);
 }

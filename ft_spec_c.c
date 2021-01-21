@@ -6,7 +6,7 @@
 /*   By: cquickbe <cquickbe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/09 11:01:25 by cquickbe          #+#    #+#             */
-/*   Updated: 2021/01/09 12:52:54 by cquickbe         ###   ########.fr       */
+/*   Updated: 2021/01/17 17:04:35 by cquickbe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ void		ft_spec_c_one(char c, int *wid_acc)
 	}
 }
 
-void		ft_spec_c(va_list ap, int dash_zero, int *wid_acc)
+void		ft_spec_c(va_list ap, int *dash_zero, int *wid_acc)
 {
 	char c;
 
 	c = va_arg(ap, int);
-	if (dash_zero < 0)
+	if (dash_zero[0] > dash_zero[1])
 		ft_spec_c_one(c, wid_acc);
 	else if (wid_acc[0] > 0)
 	{
